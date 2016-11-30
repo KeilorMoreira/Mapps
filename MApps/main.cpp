@@ -346,48 +346,34 @@ void crearVentana()
     sf::Sprite playerImage; // Declaracion del Sprite
     playerImage.setTexture(animacion); // mete el Sprite dentro de la textura. Una textura puede tener varios sprites.
 
-    sf::Texture menuOP1;
-    menuOP1.loadFromFile("data/rutaCorta.png");
-    sf::Sprite RCimg;
-    RCimg.setTexture(menuOP1);
-    RCimg.setPosition(-60,50);
-
-    sf::Texture menuOP2;
-    menuOP2.loadFromFile("data/borrar.png");
-    sf::Sprite Bimg;
-    Bimg.setTexture(menuOP2);
-    Bimg.setPosition(-60,150);
-
     sf::View view1(sf::FloatRect(-10, 0, 1250, 1300)); // Ajusta el ancho y alto de la imagen segun la ventana.
-    view1.move(-50,0); // Centra el mapa en la pantalla
     window.setView(view1); // Asigna la vista con los ajustes a la ventana
 
 
-
-    sf::String str = "Digite para ir:\n";
-    str+="\n [ar]  Argentina";
-    str+="\n [ca]  Canada";
-    str+="\n [cr]  Costa Rica";
-    str+="\n [cu]  Cuba";
-    str+="\n [sa]  El Salvador";
-    str+="\n [us]  Estados Unidos";
-    str+="\n [gu]  Guatemala";
-    str+="\n [me]  Mexico";
-    str+="\n [ni]  Nicaragua";
-    str+="\n [pa]  Panama";
-
+    // Text para los codigos
+    sf::String strCod = "Digite para ir:\n";
+    strCod+="\n [ar]  Argentina";
+    strCod+="\n [ca]  Canada";
+    strCod+="\n [cr]  Costa Rica";
+    strCod+="\n [cu]  Cuba";
+    strCod+="\n [sa]  El Salvador";
+    strCod+="\n [us]  Estados Unidos";
+    strCod+="\n [gu]  Guatemala";
+    strCod+="\n [me]  Mexico";
+    strCod+="\n [ni]  Nicaragua";
+    strCod+="\n [pa]  Panama";
     sf::Text txtPaises;
     sf::Font fuente;
     if (!fuente.loadFromFile("data/fuentes/OpenSans_Regular.ttf"))
     {
         std::cout<<"Error al cargar fuente de texto";
     }
-    txtPaises.setString(str);
+    txtPaises.setString(strCod);
     txtPaises.setFont(fuente);
     txtPaises.setFillColor(sf::Color::Green);
     txtPaises.setCharacterSize(20);
     txtPaises.setColor(sf::Color::Red);
-    txtPaises.setPosition(sf::Vector2f(1000,50));
+    txtPaises.setPosition(sf::Vector2f(1010,50));
 
     // Entrada de datos.
     std::string input;
@@ -397,22 +383,31 @@ void crearVentana()
     {
         std::cout<<"Error al cargar fuente de texto";
     }
-    sf::String mostrar= "In: ";
+    sf::String mostrar= "Input: ";
     txtin.setString(mostrar);
     txtin.setFont(fuente2);
     txtin.setFillColor(sf::Color::Green);
     txtin.setCharacterSize(20);
     txtin.setColor(sf::Color::Blue);
-    txtin.setPosition(sf::Vector2f(1000,0));
+    txtin.setPosition(sf::Vector2f(1010,0));
 
+    // Texto con instrucciones.
+    sf::Text txtInst;
+    sf::String Ins= "Lista Instrucciones:\n[cod+espacio+Inst]\n";
+    Ins+="\n [i]  Definir Inicio";
+    Ins+="\n [r]  Buscar Ruta Corta";
+    txtInst.setString(Ins);
+    txtInst.setFont(fuente2);
+    txtInst.setCharacterSize(20);
+    txtInst.setColor(sf::Color::Magenta);
+    txtInst.setPosition(sf::Vector2f(1010,800));
 
     // Bucle del juego
 
     while (window.isOpen())
     {
         window.draw(background); // Dibujamos el mapa en la ventana
-        window.draw(RCimg);
-        window.draw(Bimg);
+
 
         // Bucle de Eventos de ventana
         sf::Event event;
@@ -427,14 +422,25 @@ void crearVentana()
 
                 if(event.key.code==sf::Keyboard::Return)  // Establecer posicion inicial
                 {
-                    struct ciudad*enc = buscarCodCi(input);
-                    if(enc->cordenada!=sf::Vector2f(0,0))
+
+                    size_t tam = input.length()-1;
+
+                    if(input.at(tam) == 'i')
                     {
-                        playerImage.setPosition(enc->cordenada);
-                        mostrar= "Posicion: "+enc->nombre;
-                        txtin.setString(mostrar);
+                        input.erase(tam-1); // -1 para borrar el espacio
+                        struct ciudad*enc = buscarCodCi(input);
+                        if(enc->cordenada!=sf::Vector2f(0,0) && enc!=NULL)
+                        {
+                            playerImage.setPosition(enc->cordenada);
+                            mostrar= "Posicion: "+enc->nombre;
+                            txtin.setString(mostrar);
+                        }
+                    }
+                    else if(input.at(tam) == 'r'){
 
                     }
+
+
                 }
 
                 break; // break del caso keyPressed
@@ -504,6 +510,7 @@ void crearVentana()
         window.draw(lines);
         window.draw(txtPaises); // Pintamos las intrucciones de paises
         window.draw(txtin);// Pintamos lo que digita el usuario.
+        window.draw(txtInst);// Pintamos lo que digita el usuario.
         window.display(); // Mostrar el buffer en pantalla
         // Limpiar ventana con el color negro
         window.clear(sf::Color::White);//(sf::Color::Black);
