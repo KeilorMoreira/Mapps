@@ -370,9 +370,8 @@ void crearVentana()
     }
     txtPaises.setString(strCod);
     txtPaises.setFont(fuente);
-    txtPaises.setFillColor(sf::Color::Green);
     txtPaises.setCharacterSize(20);
-    txtPaises.setColor(sf::Color::Red);
+    txtPaises.setColor(sf::Color::Black);
     txtPaises.setPosition(sf::Vector2f(1010,50));
 
     // Entrada de datos.
@@ -383,13 +382,21 @@ void crearVentana()
     {
         std::cout<<"Error al cargar fuente de texto";
     }
-    sf::String mostrar= "Input: ";
+    sf::String mostrar = "Input: ";
     txtin.setString(mostrar);
     txtin.setFont(fuente2);
-    txtin.setFillColor(sf::Color::Green);
     txtin.setCharacterSize(20);
     txtin.setColor(sf::Color::Blue);
     txtin.setPosition(sf::Vector2f(1010,0));
+
+    //Posicion actual.
+    sf::Text txtActual;
+    sf::String posActual= "Posicion: ";
+    txtActual.setString(posActual);
+    txtActual.setFont(fuente2);
+    txtActual.setCharacterSize(18);
+    txtActual.setColor(sf::Color::Green);
+    txtActual.setPosition(sf::Vector2f(1010,750));
 
     // Texto con instrucciones.
     sf::Text txtInst;
@@ -431,16 +438,16 @@ void crearVentana()
                         struct ciudad*enc = buscarCodCi(input);
                         if(enc->cordenada!=sf::Vector2f(0,0) && enc!=NULL)
                         {
-                            playerImage.setPosition(enc->cordenada);
-                            mostrar= "Posicion: "+enc->nombre;
-                            txtin.setString(mostrar);
+                            playerImage.setPosition(sf::Vector2f(enc->cordenada.x-8,enc->cordenada.y-8));
+                            posActual= "Posicion: "+enc->nombre;
+                            txtActual.setString(posActual);
                         }
                     }
                     else if(input.at(tam) == 'r'){
 
                     }
-
-
+                    mostrar = "Input: "; // Limpiar el input
+                    txtin.setString(mostrar);
                 }
 
                 break; // break del caso keyPressed
@@ -472,14 +479,8 @@ void crearVentana()
         {
             source.x +=32;
         }
+
         //
-
-
-        sf::IntRect rect(source.x,source.y*32,32,32);// Coloca el segmento de la animacion en un rectangulo
-        //para luego setearlo a textura mostrarlo como textura.
-        playerImage.setTextureRect(sf::IntRect(source.x,source.y*32,32,32));
-        window.draw(playerImage); //Dibuja en la ventana el Sprite playerImage
-
         for (std::vector<Linea>::iterator it = Ruta.begin(); it != Ruta.end(); ++it)  // Dibuja las lineas
         {
             sf::RectangleShape rectCaja((*it).m_Size);
@@ -488,6 +489,7 @@ void crearVentana()
             window.draw(rectCaja); //Dibujamos el elemento en el buffer
         }
 
+        //
         for (std::vector<Bandera>::iterator it2 = Banderas.begin(); it2 != Banderas.end(); ++it2)  // Dibuja las banderas
         {
             //sf::RectangleShape recBandera((*it2).m_Size);
@@ -502,15 +504,25 @@ void crearVentana()
             window.draw(img);
         }
 
+        //
         sf::VertexArray lines(sf::Lines, sizeof(CaminoCorto));
         for(int c=0; c>sizeof(CaminoCorto); c++)
         {
             lines[c].position = sf::Vector2f(CaminoCorto[c].x+15,CaminoCorto[c].y+15);
         }
+
+
+
+        sf::IntRect rect(source.x,source.y*32,32,32);// Coloca el segmento de la animacion en un rectangulo
+        //para luego setearlo a textura mostrarlo como textura.
+        playerImage.setTextureRect(sf::IntRect(source.x,source.y*32,32,32));
+        window.draw(playerImage); //Dibuja en la ventana el Sprite playerImage
+
         window.draw(lines);
         window.draw(txtPaises); // Pintamos las intrucciones de paises
         window.draw(txtin);// Pintamos lo que digita el usuario.
         window.draw(txtInst);// Pintamos lo que digita el usuario.
+        window.draw(txtActual);
         window.display(); // Mostrar el buffer en pantalla
         // Limpiar ventana con el color negro
         window.clear(sf::Color::White);//(sf::Color::Black);

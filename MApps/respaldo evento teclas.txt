@@ -1,0 +1,89 @@
+/*
+                if(event.key.code==sf::Keyboard::Up)
+                {
+                    source.y=Up;
+                    C_ant.x=playerImage.getPosition().x;
+                    C_ant.y=playerImage.getPosition().y;
+
+                    sf::Vector2f posLinea = sf::Vector2f(C_ant.x,C_ant.y);
+                    Linea nueva = Linea(posLinea,sf::Vector2f(5,-50));
+                    Ruta.push_back(nueva);
+
+                    playerImage.setPosition(C_ant.x,C_ant.y-50);
+                    //playerImage.setPosition(300,200);
+                    //playerImage.move(0,-50);
+                    std::cout<<"\nUP Bg: "<<background.getPosition().x<<" "<<background.getPosition().y<<std::endl;
+                    std::cout<<"UP Py: "<<playerImage.getPosition().x<<" "<<playerImage.getPosition().y<<std::endl;
+                }
+
+                else if(event.key.code==sf::Keyboard::Down)
+                {
+                    std::cout<<"\nDW Bg: "<<background.getPosition().x<<" "<<background.getPosition().y<<std::endl;
+                    std::cout<<"DW Py: "<<playerImage.getPosition().x<<" "<<playerImage.getPosition().y<<std::endl;
+
+                    source.y=Down;
+                    C_ant.x=playerImage.getPosition().x;
+                    C_ant.y=playerImage.getPosition().y;
+
+                    sf::Vector2f posLinea = sf::Vector2f(C_ant.x,C_ant.y);
+                    Linea nueva = Linea(posLinea,sf::Vector2f(5,50));
+                    Ruta.push_back(nueva);
+
+                    playerImage.setPosition(C_ant.x,C_ant.y+50);
+                    //playerImage.setPosition(300,400);
+                    //playerImage.move(0,50);
+
+                }
+
+                else if(event.key.code==sf::Keyboard::Right)
+                {
+                    source.y=Right;
+                    C_ant=playerImage.getPosition();
+                    playerImage.setPosition(Coor.back().x,Coor.back().y);
+                    Coor.pop_back();
+                    sf::Vector2f pintor=C_ant;
+                    while(pintor != Coor.back()){ //3004x1296
+
+                            if(pintor.x>Coor.back().x){
+                                pintor.x-=1;
+                            }
+                            if(pintor.x<Coor.back().x){
+                                pintor.x+=1;
+                            }
+                            if(pintor.y<Coor.back().y){
+                                pintor.y+=1;
+                            }
+                            if(pintor.y>Coor.back().y){
+                                pintor.y-=1;
+                            }
+                            std::cout<<"\n"<<pintor.x<<" , "<<pintor.y;
+                            sf::Vector2f posLinea = pintor;
+                            Linea nueva = Linea(posLinea,sf::Vector2f(6,6));
+                            Ruta.push_back(nueva);
+                    }
+                    std::cout<<"\nRI Bg: "<<background.getPosition().x<<" "<<background.getPosition().y<<std::endl;
+                    std::cout<<"RI Py: "<<playerImage.getPosition().x<<" "<<playerImage.getPosition().y<<std::endl;
+                    //playerImage.setPosition(400,300);
+                    //playerImage.move(50,0);
+
+                }
+
+                else if(event.key.code==sf::Keyboard::Left)
+                {
+                    std::cout<<"\nLF Bg: "<<background.getPosition().x<<" "<<background.getPosition().y<<std::endl;
+                    std::cout<<"LF Py: "<<playerImage.getPosition().x<<" "<<playerImage.getPosition().y<<std::endl;
+                    source.y=Left;
+
+                    C_ant.x=playerImage.getPosition().x;
+                    C_ant.y=playerImage.getPosition().y;
+
+                    sf::Vector2f posLinea = sf::Vector2f(C_ant.x,C_ant.y);
+                    Linea nueva = Linea(posLinea,sf::Vector2f(-50,5));
+                    Ruta.push_back(nueva);
+
+                    playerImage.setPosition(C_ant.x-50,C_ant.y);
+                    //playerImage.setPosition(200,300);
+                    //playerImage.move(-50,0);
+
+                }
+*/
