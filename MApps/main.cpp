@@ -294,7 +294,6 @@ void dijkstra(std::string origen,std::string destino)
     }
     o->visitado = true;
     CaminoCorto.push_back(o->cordenada);
-    std::cout<<"\n"<<o->nombre;
     struct calle *tempA = o->camino;
     while(tempA != NULL)
     {
@@ -324,8 +323,8 @@ void validarGrafo()
 void crearVentana()
 {
     enum Direction {Down,Left,Right,Up};
-    sf::Vector2i source(0,Down); //Direccion en la que ve la animacion.
-    sf::Vector2f C_ant(0,0);
+    sf::Vector2i source(1,Down); //Direccion en la que ve la animacion.
+
 
     // Crear ventana
     sf::RenderWindow window;
@@ -422,17 +421,17 @@ void crearVentana()
         {
             switch(event.type)
             {
-            case sf::Event::Closed:
+            case sf::Event::Closed: // Si se da click en boton cerrar.
                 window.close();
                 break;
             case sf::Event::KeyPressed:
 
-                if(event.key.code==sf::Keyboard::Return)  // Establecer posicion inicial
+                if(event.key.code==sf::Keyboard::Return)
                 {
 
                     size_t tam = input.length()-1;
 
-                    if(input.at(tam) == 'i')
+                    if(input.at(tam) == 'i') // Establecer posicion inicial
                     {
                         input.erase(tam-1); // -1 para borrar el espacio
                         struct ciudad*enc = buscarCodCi(input);
@@ -443,9 +442,33 @@ void crearVentana()
                             txtActual.setString(posActual);
                         }
                     }
-                    else if(input.at(tam) == 'r'){
-
+                    else if(input.at(tam) == 'r') // Buscar Ruta Corta
+                    {
+                        // Ruta Corta
                     }
+                    else if(event.key.code==sf::Keyboard::Up)
+                    {
+                        source.y=Up; //Coloca animacion hacia arriba
+                    }
+
+                    else if(event.key.code==sf::Keyboard::Down)
+                    {
+                        source.y=Down; //Coloca animacion hacia abajo
+                    }
+
+                    else if(event.key.code==sf::Keyboard::Right)
+                    {
+                        source.y=Right; //Coloca animacion hacia la derecha
+                    }
+
+                    else if(event.key.code==sf::Keyboard::Left)
+                    {
+                        source.y=Left; //Coloca animacion hacia la izquierda
+                    }
+
+
+
+
                     mostrar = "Input: "; // Limpiar el input
                     txtin.setString(mostrar);
                 }
@@ -460,24 +483,12 @@ void crearVentana()
             case sf::Event::TextEntered:
                 if(event.text.unicode < 128)
                 {
-                    //str2 += static_cast<char>(event.text.unicode);
-                    //texto2.setString(str2);
                     input += static_cast<char>(event.text.unicode);
                     mostrar += static_cast<char>(event.text.unicode);;
                     txtin.setString(mostrar);
                 }
                 break;
             }
-        }
-
-
-        if(source.x * 32 >=animacion.getSize().x)
-        {
-            source.x=0;
-        }
-        else
-        {
-            source.x +=32;
         }
 
         //
@@ -489,7 +500,7 @@ void crearVentana()
             window.draw(rectCaja); //Dibujamos el elemento en el buffer
         }
 
-        //
+        // Ciclo que pinta las banderas dentro del vector.
         for (std::vector<Bandera>::iterator it2 = Banderas.begin(); it2 != Banderas.end(); ++it2)  // Dibuja las banderas
         {
             //sf::RectangleShape recBandera((*it2).m_Size);
@@ -504,21 +515,22 @@ void crearVentana()
             window.draw(img);
         }
 
-        //
-        sf::VertexArray lines(sf::Lines, sizeof(CaminoCorto));
-        for(int c=0; c>sizeof(CaminoCorto); c++)
+
+        // Animacion.
+        if(source.x * 32 >=animacion.getSize().x)
         {
-            lines[c].position = sf::Vector2f(CaminoCorto[c].x+15,CaminoCorto[c].y+15);
+            source.x=0;
         }
-
-
-
+        else
+        {
+            source.x +=32;
+        }
         sf::IntRect rect(source.x,source.y*32,32,32);// Coloca el segmento de la animacion en un rectangulo
         //para luego setearlo a textura mostrarlo como textura.
         playerImage.setTextureRect(sf::IntRect(source.x,source.y*32,32,32));
         window.draw(playerImage); //Dibuja en la ventana el Sprite playerImage
 
-        window.draw(lines);
+
         window.draw(txtPaises); // Pintamos las intrucciones de paises
         window.draw(txtin);// Pintamos lo que digita el usuario.
         window.draw(txtInst);// Pintamos lo que digita el usuario.
