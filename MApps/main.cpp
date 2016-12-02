@@ -319,7 +319,7 @@ void validarGrafo()
 
 
 // Graficos
-
+int CB = 0;
 void crearVentana()
 {
     enum Direction {Down,Left,Right,Up};
@@ -332,7 +332,7 @@ void crearVentana()
     //window.create(sf::VideoMode(1250,1284), "International Traveler");//,sf::Style::Close);
     window.create(sf::VideoMode(900,700), "International Traveler");
     window.setVerticalSyncEnabled(true);
-    window.setFramerateLimit(10); // martillazo de primera mano XDDDDD usado para controlar los frames de la animacion
+    window.setFramerateLimit(10); // Controla los frames de la ventana (animacion)
 
     //Texturas y sus Sprites
     sf::Texture mapa;
@@ -374,15 +374,15 @@ void crearVentana()
     txtPaises.setPosition(sf::Vector2f(1010,50));
 
     // Entrada de datos.
-    std::string input;
+
     sf::Text txtin;
     sf::Font fuente2;
     if (!fuente2.loadFromFile("data/fuentes/OpenSans_Bold.ttf"))
     {
         std::cout<<"Error al cargar fuente de texto";
     }
-    sf::String mostrar = "Input: ";
-    txtin.setString(mostrar);
+    std::string input;
+    sf::String mostrar;
     txtin.setFont(fuente2);
     txtin.setCharacterSize(20);
     txtin.setColor(sf::Color::Blue);
@@ -446,31 +446,35 @@ void crearVentana()
                     {
                         // Ruta Corta
                     }
-                    else if(event.key.code==sf::Keyboard::Up)
+                }
+                else if(event.key.code==sf::Keyboard::BackSpace)
+                {
+                    if(CB!=0)
                     {
-                        source.y=Up; //Coloca animacion hacia arriba
+                        input.erase(CB-1);
+                        std::cout<<"\n"<<input;
+                        mostrar = "Input: "+input;
+                        txtin.setString(mostrar);
                     }
+                }
+                else if(event.key.code==sf::Keyboard::Up)
+                {
+                    source.y=Up; //Coloca animacion hacia arriba
+                }
 
-                    else if(event.key.code==sf::Keyboard::Down)
-                    {
-                        source.y=Down; //Coloca animacion hacia abajo
-                    }
+                else if(event.key.code==sf::Keyboard::Down)
+                {
+                    source.y=Down; //Coloca animacion hacia abajo
+                }
 
-                    else if(event.key.code==sf::Keyboard::Right)
-                    {
-                        source.y=Right; //Coloca animacion hacia la derecha
-                    }
+                else if(event.key.code==sf::Keyboard::Right)
+                {
+                    source.y=Right; //Coloca animacion hacia la derecha
+                }
 
-                    else if(event.key.code==sf::Keyboard::Left)
-                    {
-                        source.y=Left; //Coloca animacion hacia la izquierda
-                    }
-
-
-
-
-                    mostrar = "Input: "; // Limpiar el input
-                    txtin.setString(mostrar);
+                else if(event.key.code==sf::Keyboard::Left)
+                {
+                    source.y=Left; //Coloca animacion hacia la izquierda
                 }
 
                 break; // break del caso keyPressed
@@ -484,7 +488,9 @@ void crearVentana()
                 if(event.text.unicode < 128)
                 {
                     input += static_cast<char>(event.text.unicode);
-                    mostrar += static_cast<char>(event.text.unicode);;
+                    size_t tam = input.length()-1;
+                    CB=tam;
+                    mostrar = "Input: "+input;
                     txtin.setString(mostrar);
                 }
                 break;
@@ -529,15 +535,18 @@ void crearVentana()
         //para luego setearlo a textura mostrarlo como textura.
         playerImage.setTextureRect(sf::IntRect(source.x,source.y*32,32,32));
         window.draw(playerImage); //Dibuja en la ventana el Sprite playerImage
-
-
         window.draw(txtPaises); // Pintamos las intrucciones de paises
+
+        if(CB==0)
+        {
+            mostrar = "Input: ";
+            txtin.setString(mostrar);
+        }
         window.draw(txtin);// Pintamos lo que digita el usuario.
         window.draw(txtInst);// Pintamos lo que digita el usuario.
-        window.draw(txtActual);
+        window.draw(txtActual); //Pintamos pais actual
         window.display(); // Mostrar el buffer en pantalla
-        // Limpiar ventana con el color negro
-        window.clear(sf::Color::White);//(sf::Color::Black);
+        window.clear(sf::Color::White);
 
     }
 }

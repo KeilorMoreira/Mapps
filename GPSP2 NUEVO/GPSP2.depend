@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1480602672 source:c:\users\admin\documents\c++\gpsp2\main.cpp
+	<SFML/Graphics.hpp>
+	<iostream>
+	<queue>
+	"fstream"
+
